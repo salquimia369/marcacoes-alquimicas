@@ -24,7 +24,6 @@
       --green:      #4a8c5c;
       --blocked:    #3a2a20;
     }
-    /* THIS IS A TEST */
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -583,7 +582,7 @@
     <a href="https://salquimia369.github.io/Alquimia-do-Tempo/index.html">⌛ Alquimia do Tempo</a>
     &nbsp;·&nbsp;
     <a href="https://salquimia369.github.io/oraculoalquimico/">☽ Oráculo Alquímico</a>
-    <p>Todos os fusos em horário de Brasília (BRT) · 🇨🇻 +2h · 🇵🇹 +3/+4h</p>
+    <p>Horários de Cabo Verde (CVST / GMT-1) · 🇧🇷 -2h · 🇵🇹 +2/+3h</p>
   </footer>
 
 </div>
@@ -592,7 +591,7 @@
 // ═══════════════════════════════════════════════════════════
 // CONFIG — SUBSTITUI PELO TEU GOOGLE APPS SCRIPT URL
 // ═══════════════════════════════════════════════════════════
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWeOqqBbR7UPpzdEvLYE9xmFTIjsvX0uoTQZ837pk/dev';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw8LS3eCJVjH-t8tCHTbtBrhZcSi-t8kqkFgrykzW0usDkoxHwnSYEA8w3ZkqMDAqQ/exec';
 
 // ═══════════════════════════════════════════════════════════
 // STATE
@@ -785,7 +784,7 @@ async function submitBooking() {
 
     if (data.success) {
       showSuccess(
-        `A tua sessão de <strong>${getSessionName(selectedSession)}</strong> está confirmada para <strong>${formatDatePT(selectedSlot.date)}</strong> às <strong>${selectedSlot.time}</strong> (horário de Brasília).<br><br>Confirmaremos em breve por email e WhatsApp com o link do Google Meet.`
+        `A tua sessão de <strong>${getSessionName(selectedSession)}</strong> está confirmada para <strong>${formatDatePT(selectedSlot.date)}</strong> às <strong>${selectedSlot.time}</strong> (horário de Cabo Verde).<br><br>Confirmação em breve por email e WhatsApp com o link do Google Meet.`
       );
       // Mark slot as taken in UI
       document.querySelector(`[data-id="${selectedSlot.id}"]`)?.classList.add('taken');
