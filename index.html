@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marcação de Sessões Terapêuticas Alquímicas - by Miguel Bernardo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;500&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold:       #c9a84c;
+      --gold-light: #e8c96e;
+      --gold-dim:   #8a6f32;
+      --bg:         #0d0b08;
+      --bg2:        #141109;
+      --bg3:        #1c1710;
+      --surface:    #211d13;
+      --surface2:   #2a2416;
+      --border:     rgba(201,168,76,0.18);
+      --border-h:   rgba(201,168,76,0.45);
+      --text:       #e8dfc8;
+      --text-dim:   #9a8f76;
+      --text-faint: #5a5244;
+      --red:        #c04a3a;
+      --green:      #4a8c5c;
+      --blocked:    #3a2a20;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'EB Garamond', 'Cormorant Garamond', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* ── background texture ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(201,168,76,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 90% 90%, rgba(201,168,76,0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .container {
+      position: relative; z-index: 1;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ── header ── */
+    header {
+      text-align: center;
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 48px;
+    }
+
+    .sigil {
+      font-size: 2.4rem;
+      margin-bottom: 12px;
+      opacity: 0.85;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+    }
+
+    header h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.5rem, 4vw, 2.1rem);
+      font-weight: 400;
+      color: var(--gold-light);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--text-dim);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* ── section titles ── */
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── sessions ── */
+    .sessions-grid {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .session-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 20px 22px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      transition: border-color 0.2s, background 0.2s;
+      cursor: pointer;
+      position: relative;
+    }
+    .session-card.active {
+      border-color: var(--gold-dim);
+      background: var(--surface2);
+      cursor: pointer;
+    }
+    .session-card.active:hover {
+      border-color: var(--gold);
+    }
+    .session-card.blocked {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: var(--blocked);
+    }
+    .session-card.selected {
+      border-color: var(--gold);
+      background: #2a2210;
+      box-shadow: 0 0 0 1px var(--gold-dim) inset;
+    }
+
+    .session-icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .session-info h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--gold-light);
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    .session-info p {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    .session-badge {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .badge-free {
+      background: rgba(74,140,92,0.2);
+      color: #6abf82;
+      border: 1px solid rgba(74,140,92,0.35);
+    }
+    .badge-soon {
+      background: rgba(201,168,76,0.08);
+      color: var(--gold-dim);
+      border: 1px solid rgba(201,168,76,0.15);
+    }
+
+    .session-card.active input[type="radio"] {
+      accent-color: var(--gold);
+    }
+
+    /* ── form ── */
+    .form-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 30px 28px;
+      margin-bottom: 32px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .form-grid .full { grid-column: 1 / -1; }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .field label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+    }
+
+    .field input,
+    .field select {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--text);
+      font-family: 'EB Garamond', serif;
+      font-size: 1rem;
+      padding: 10px 14px;
+      transition: border-color 0.2s;
+      outline: none;
+      width: 100%;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .field input::placeholder { color: var(--text-faint); }
+    .field input:focus,
+    .field select:focus { border-color: var(--gold-dim); }
+    .field input.error,
+    .field select.error { border-color: var(--red); }
+
+    .field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238a6f32'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+    }
+    .field select option { background: #1c1710; }
+
+    .field-note {
+      font-size: 0.8rem;
+      color: var(--text-faint);
+      font-style: italic;
+    }
+
+    /* ── date/time picker ── */
+    .slots-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 30px 28px;
+      margin-bottom: 32px;
+    }
+
+    .no-session-msg {
+      color: var(--text-faint);
+      font-style: italic;
+      font-size: 0.95rem;
+      text-align: center;
+      padding: 24px 0;
+    }
+
+    .dates-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .date-group {}
+
+    .date-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 8px;
+      padding-left: 2px;
+    }
+
+    .slots-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .slot-btn {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--text-dim);
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      padding: 8px 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .slot-btn:hover:not(:disabled) {
+      border-color: var(--gold-dim);
+      color: var(--gold-light);
+    }
+    .slot-btn.selected {
+      background: rgba(201,168,76,0.12);
+      border-color: var(--gold);
+      color: var(--gold-light);
+    }
+    .slot-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      text-decoration: line-through;
+    }
+    .slot-btn.taken:disabled {
+      color: var(--text-faint);
+    }
+
+    /* ── submit ── */
+    .submit-area {
+      text-align: center;
+    }
+
+    .btn-submit {
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      border: none;
+      border-radius: 2px;
+      padding: 16px 48px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn-submit:hover:not(:disabled) {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+    .btn-submit:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .submit-note {
+      margin-top: 14px;
+      font-size: 0.85rem;
+      font-style: italic;
+      color: var(--text-faint);
+    }
+
+    /* ── messages ── */
+    .msg {
+      border-radius: 2px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+      display: none;
+    }
+    .msg.show { display: block; }
+    .msg-error {
+      background: rgba(192,74,58,0.12);
+      border: 1px solid rgba(192,74,58,0.35);
+      color: #e07060;
+    }
+    .msg-success {
+      background: rgba(74,140,92,0.12);
+      border: 1px solid rgba(74,140,92,0.3);
+      color: #7acf90;
+      text-align: center;
+    }
+    .msg-success .success-icon {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .msg-success strong {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    /* ── loading ── */
+    .loading {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--gold-dim);
+      font-style: italic;
+      font-size: 0.9rem;
+      padding: 12px 0;
+    }
+    .loading.show { display: flex; }
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── divider ── */
+    .ornament {
+      text-align: center;
+      color: var(--gold-dim);
+      font-size: 0.9rem;
+      letter-spacing: 0.4em;
+      margin: 32px 0;
+      opacity: 0.5;
+    }
+
+    /* ── footer ── */
+    footer {
+      text-align: center;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      margin-top: 56px;
+    }
+    footer a {
+      color: var(--gold-dim);
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    footer a:hover { color: var(--gold-light); }
+    footer p {
+      font-size: 0.8rem;
+      color: var(--text-faint);
+      font-style: italic;
+      margin-top: 8px;
+    }
+
+    /* ── responsive ── */
+    @media (max-width: 560px) {
+      header { padding: 36px 0 28px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-grid .full { grid-column: 1; }
+      .form-section, .slots-section { padding: 22px 18px; }
+      .btn-submit { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="sigil">⚗ ☽ ✦</div>
+    <h1>Marcação de Sessão</h1>
+    <p>Escolhe o teu momento. A transformação começa aqui.</p>
+  </header>
+
+  <!-- ── STEP 1: Choose session ── -->
+  <div class="section-title">I · Sessão</div>
+
+  <div class="sessions-grid" id="sessionsGrid">
+
+    <div class="session-card active selected" data-session="leitura-chakras" onclick="selectSession(this)">
+      <div class="session-icon">⊕</div>
+      <div class="session-info">
+        <h3>Leitura de Mapa de Chakras</h3>
+        <p>Uma sessão de análise e leitura energética do teu mapa de chakras. Inclui diagnóstico e orientações práticas.</p>
+      </div>
+      <span class="session-badge badge-free">Gratuita</span>
+    </div>
+
+    <div class="session-card blocked" data-session="alquimia-pessoal" title="Em breve">
+      <div class="session-icon">☿</div>
+      <div class="session-info">
+        <h3>Alquimia Pessoal</h3>
+        <p>Processo de transmutação profunda. Trabalho de sombra, arquétipos e alinhamento de propósito.</p>
+      </div>
+      <span class="session-badge badge-soon">Em Breve</span>
+    </div>
+
+    <div class="session-card blocked" data-session="astrologia-natal" title="Em breve">
+      <div class="session-icon">☉</div>
+      <div class="session-info">
+        <h3>Mapa Natal Astrológico</h3>
+        <p>Leitura aprofundada do teu mapa natal. Planetas, casas, aspectos e o teu contrato de alma.</p>
+      </div>
+      <span class="session-badge badge-soon">Em Breve</span>
+    </div>
+
+    <div class="session-card blocked" data-session="oraculo-vivo" title="Em breve">
+      <div class="session-icon">🜃</div>
+      <div class="session-info">
+        <h3>Oráculo Vivo</h3>
+        <p>Sessão de leitura oracular com suporte de tarot alquímico e interpretação simbólica personalizada.</p>
+      </div>
+      <span class="session-badge badge-soon">Em Breve</span>
+    </div>
+
+  </div>
+
+  <!-- ── STEP 2: Personal data ── -->
+  <div class="section-title">II · Os Teus Dados</div>
+
+  <div class="form-section">
+    <div class="form-grid">
+      <div class="field full">
+        <label>Nome Completo *</label>
+        <input type="text" id="nome" placeholder="O teu nome" autocomplete="name" />
+      </div>
+      <div class="field">
+        <label>Idade *</label>
+        <input type="number" id="idade" placeholder="Ex: 32" min="16" max="99" />
+      </div>
+      <div class="field">
+        <label>Email *</label>
+        <input type="email" id="email" placeholder="o.teu@email.com" autocomplete="email" />
+      </div>
+      <div class="field full">
+        <label>WhatsApp *</label>
+        <input type="tel" id="whatsapp" placeholder="+351 912 345 678" autocomplete="tel" />
+        <span class="field-note">Inclui o indicativo do país</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 3: Choose slot ── -->
+  <div class="section-title">III · Data e Hora</div>
+
+  <div class="slots-section">
+    <div id="noSessionMsg" class="no-session-msg" style="display:none">
+      Selecciona uma sessão disponível para ver os horários.
+    </div>
+    <div id="loadingSlots" class="loading">
+      <div class="spinner"></div> A carregar horários disponíveis…
+    </div>
+    <div id="slotsList" class="dates-list"></div>
+    <div id="noSlotsMsg" class="no-session-msg" style="display:none">
+      Neste momento não há horários disponíveis. Volta em breve.
+    </div>
+  </div>
+
+  <!-- ── messages ── -->
+  <div class="msg msg-error" id="msgError"></div>
+  <div class="msg msg-success" id="msgSuccess">
+    <span class="success-icon">✦</span>
+    <strong>Marcação Recebida</strong>
+    <span id="successText"></span>
+  </div>
+
+  <!-- ── submit ── -->
+  <div class="submit-area">
+    <div class="loading" id="loadingSubmit">
+      <div class="spinner"></div> A processar a tua marcação…
+    </div>
+    <button class="btn-submit" id="btnSubmit" onclick="submitBooking()">
+      Confirmar Marcação
+    </button>
+    <p class="submit-note">
+      Receberás uma confirmação por email · O link do Google Meet será enviado em seguida
+    </p>
+  </div>
+
+  <div class="ornament">· ⚗ ·</div>
+
+  <footer>
+    <a href="https://salquimia369.github.io/Alquimia-do-Tempo/index.html">⌛ Alquimia do Tempo</a>
+    &nbsp;·&nbsp;
+    <a href="https://salquimia369.github.io/oraculoalquimico/">☽ Oráculo Alquímico</a>
+    <p>Todos os fusos em horário de Brasília (BRT) · 🇨🇻 +2h · 🇵🇹 +3/+4h</p>
+  </footer>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// CONFIG — SUBSTITUI PELO TEU GOOGLE APPS SCRIPT URL
+// ═══════════════════════════════════════════════════════════
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw8LS3eCJVjH-t8tCHTbtBrhZcSi-t8kqkFgrykzW0usDkoxHwnSYEA8w3ZkqMDAqQ/exec';
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let selectedSession = 'leitura-chakras';
+let selectedSlot    = null;   // { date, time, id }
+let availableSlots  = [];
+
+// ═══════════════════════════════════════════════════════════
+// SESSION SELECTION
+// ═══════════════════════════════════════════════════════════
+function selectSession(card) {
+  if (card.classList.contains('blocked')) return;
+  document.querySelectorAll('.session-card.selected').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  selectedSession = card.dataset.session;
+  selectedSlot = null;
+  loadSlots();
+}
+
+// ═══════════════════════════════════════════════════════════
+// LOAD AVAILABLE SLOTS FROM GOOGLE SHEETS (via Apps Script)
+// ═══════════════════════════════════════════════════════════
+async function loadSlots() {
+  const list     = document.getElementById('slotsList');
+  const loading  = document.getElementById('loadingSlots');
+  const noSlots  = document.getElementById('noSlotsMsg');
+
+  list.innerHTML = '';
+  noSlots.style.display = 'none';
+  loading.classList.add('show');
+
+  try {
+    const url = `${APPS_SCRIPT_URL}?action=getSlots&session=${encodeURIComponent(selectedSession)}`;
+    const res  = await fetch(url);
+    const data = await res.json();
+    availableSlots = data.slots || [];
+    renderSlots(availableSlots);
+  } catch (err) {
+    // Fallback: demo slots para desenvolvimento antes de ligar o Apps Script
+    console.warn('Apps Script não configurado, a usar demo slots:', err);
+    availableSlots = getDemoSlots();
+    renderSlots(availableSlots);
+  } finally {
+    loading.classList.remove('show');
+  }
+}
+
+// ── Demo slots (para testar antes de ligar o Google Sheets) ──
+function getDemoSlots() {
+  const today = new Date();
+  const slots = [];
+  for (let d = 1; d <= 7; d++) {
+    const day = new Date(today);
+    day.setDate(today.getDate() + d);
+    if (day.getDay() === 0) continue; // sem domingos
+    const dateStr = formatDate(day);
+    const times = ['10:00', '11:00', '14:00', '15:00', '16:00'];
+    times.forEach((t, i) => {
+      slots.push({
+        id:     `${dateStr}-${t}`,
+        date:   dateStr,
+        time:   t,
+        taken:  i === 2   // 14:00 sempre ocupado para demo
+      });
+    });
+  }
+  return slots;
+}
+
+function formatDate(d) {
+  return d.toISOString().split('T')[0]; // YYYY-MM-DD
+}
+
+function formatDatePT(str) {
+  const [y, m, day] = str.split('-');
+  const d = new Date(y, m - 1, day);
+  const weekdays = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
+  const months   = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  return `${weekdays[d.getDay()]}, ${parseInt(day)} de ${months[d.getMonth()]}`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER SLOTS
+// ═══════════════════════════════════════════════════════════
+function renderSlots(slots) {
+  const list    = document.getElementById('slotsList');
+  const noSlots = document.getElementById('noSlotsMsg');
+  list.innerHTML = '';
+
+  if (!slots.length) {
+    noSlots.style.display = 'block';
+    return;
+  }
+
+  // Group by date
+  const grouped = {};
+  slots.forEach(s => {
+    if (!grouped[s.date]) grouped[s.date] = [];
+    grouped[s.date].push(s);
+  });
+
+  Object.keys(grouped).sort().forEach(date => {
+    const group = document.createElement('div');
+    group.className = 'date-group';
+
+    const label = document.createElement('div');
+    label.className = 'date-label';
+    label.textContent = formatDatePT(date);
+    group.appendChild(label);
+
+    const row = document.createElement('div');
+    row.className = 'slots-row';
+
+    grouped[date].forEach(slot => {
+      const btn = document.createElement('button');
+      btn.className = 'slot-btn' + (slot.taken ? ' taken' : '');
+      btn.textContent = slot.time;
+      btn.disabled    = slot.taken;
+      btn.dataset.id  = slot.id;
+      if (!slot.taken) {
+        btn.addEventListener('click', () => selectSlot(btn, slot));
+      }
+      row.appendChild(btn);
+    });
+
+    group.appendChild(row);
+    list.appendChild(group);
+  });
+}
+
+function selectSlot(btn, slot) {
+  document.querySelectorAll('.slot-btn.selected').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedSlot = slot;
+}
+
+// ═══════════════════════════════════════════════════════════
+// SUBMIT
+// ═══════════════════════════════════════════════════════════
+async function submitBooking() {
+  clearMessages();
+
+  const nome     = document.getElementById('nome').value.trim();
+  const idade    = document.getElementById('idade').value.trim();
+  const email    = document.getElementById('email').value.trim();
+  const whatsapp = document.getElementById('whatsapp').value.trim();
+
+  // Validation
+  let errors = [];
+  if (!nome)                         errors.push('Nome completo é obrigatório.');
+  if (!idade || idade < 16)          errors.push('Idade inválida.');
+  if (!email || !email.includes('@')) errors.push('Email inválido.');
+  if (!whatsapp)                     errors.push('WhatsApp é obrigatório.');
+  if (!selectedSlot)                 errors.push('Selecciona um horário disponível.');
+  if (!selectedSession)              errors.push('Selecciona uma sessão.');
+
+  ['nome','idade','email','whatsapp'].forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.toggle('error', !el.value.trim());
+  });
+
+  if (errors.length) {
+    showError(errors.join(' '));
+    return;
+  }
+
+  // Submit
+  const btn     = document.getElementById('btnSubmit');
+  const loading = document.getElementById('loadingSubmit');
+  btn.style.display     = 'none';
+  loading.classList.add('show');
+
+  const payload = {
+    action:   'bookSlot',
+    session:  selectedSession,
+    slotId:   selectedSlot.id,
+    date:     selectedSlot.date,
+    time:     selectedSlot.time,
+    nome, idade, email, whatsapp
+  };
+
+  try {
+    const res  = await fetch(APPS_SCRIPT_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body:    JSON.stringify(payload)
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      showSuccess(
+        `A tua sessão de <strong>${getSessionName(selectedSession)}</strong> está confirmada para <strong>${formatDatePT(selectedSlot.date)}</strong> às <strong>${selectedSlot.time}</strong> (horário de Brasília).<br><br>Confirmaremos em breve por email e WhatsApp com o link do Google Meet.`
+      );
+      // Mark slot as taken in UI
+      document.querySelector(`[data-id="${selectedSlot.id}"]`)?.classList.add('taken');
+      resetForm();
+    } else {
+      showError(data.message || 'Erro ao processar a marcação. Tenta novamente.');
+      btn.style.display = '';
+    }
+  } catch (err) {
+    console.error(err);
+    showError('Não foi possível ligar ao servidor. Verifica a tua ligação e tenta novamente.');
+    btn.style.display = '';
+  } finally {
+    loading.classList.remove('show');
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════════
+function getSessionName(id) {
+  const names = {
+    'leitura-chakras':  'Leitura de Mapa de Chakras',
+    'alquimia-pessoal': 'Alquimia Pessoal',
+    'astrologia-natal': 'Mapa Natal Astrológico',
+    'oraculo-vivo':     'Oráculo Vivo'
+  };
+  return names[id] || id;
+}
+
+function showError(msg) {
+  const el = document.getElementById('msgError');
+  el.innerHTML = msg;
+  el.classList.add('show');
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function showSuccess(html) {
+  const el   = document.getElementById('msgSuccess');
+  const text = document.getElementById('successText');
+  text.innerHTML = html;
+  el.classList.add('show');
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  document.getElementById('btnSubmit').style.display = 'none';
+}
+
+function clearMessages() {
+  document.getElementById('msgError').classList.remove('show');
+  document.getElementById('msgSuccess').classList.remove('show');
+}
+
+function resetForm() {
+  ['nome','idade','email','whatsapp'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  selectedSlot = null;
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+document.querySelectorAll('input').forEach(input => {
+  input.addEventListener('input', () => input.classList.remove('error'));
+});
+
+loadSlots();
+</script>
+</body>
+</html>
