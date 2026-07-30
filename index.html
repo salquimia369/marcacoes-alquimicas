@@ -740,9 +740,9 @@ function formatDate(d) {
 function formatDatePT(str) {
   const [y, m, day] = str.split('-');
   const d = new Date(y, m - 1, day);
-  const weekdays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const months   = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  return `${weekdays[d.getDay()]}, ${parseInt(day)} ${months[d.getMonth()]}`;
+  const weekdays = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
+  const months   = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  return `${weekdays[d.getDay()]}, ${parseInt(day)} de ${months[d.getMonth()]}`;
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -813,12 +813,12 @@ async function submitBooking() {
 
   // Validation
   let errors = [];
-  if (!nome)                          errors.push('Full name is required.');
-  if (!idade || idade < 16)           errors.push('Invalid age.');
-  if (!email || !email.includes('@')) errors.push('Invalid email.');
-  if (!whatsapp)                      errors.push('WhatsApp is required.');
-  if (!selectedSlot)                  errors.push('Please select an available time slot.');
-  if (!selectedSession)               errors.push('Please select a session.');
+  if (!nome)                         errors.push('Nome completo é obrigatório.');
+  if (!idade || idade < 16)          errors.push('Idade inválida.');
+  if (!email || !email.includes('@')) errors.push('Email inválido.');
+  if (!whatsapp)                     errors.push('WhatsApp é obrigatório.');
+  if (!selectedSlot)                 errors.push('Selecciona um horário disponível.');
+  if (!selectedSession)              errors.push('Selecciona uma sessão.');
 
   ['nome','idade','email','whatsapp'].forEach(id => {
     const el = document.getElementById(id);
@@ -855,18 +855,18 @@ async function submitBooking() {
 
     if (data.success) {
       showSuccess(
-        `Your <strong>${getSessionName(selectedSession)}</strong> session is confirmed for <strong>${formatDatePT(selectedSlot.date)}</strong> at <strong>${selectedSlot.time}</strong> (Cape Verde time, GMT-1).<br><br>A confirmation will be sent shortly by email with the Google Meet link.`
+        `A tua sessão de <strong>${getSessionName(selectedSession)}</strong> está confirmada para <strong>${formatDatePT(selectedSlot.date)}</strong> às <strong>${selectedSlot.time}</strong> (horário de Cabo Verde).<br><br>Confirmação em breve por email e WhatsApp com o link do Google Meet.`
       );
       // Mark slot as taken in UI
       document.querySelector(`[data-id="${selectedSlot.id}"]`)?.classList.add('taken');
       resetForm();
     } else {
-      showError(data.message || 'Error processing the booking. Please try again.');
+      showError(data.message || 'Erro ao processar a marcação. Tenta novamente.');
       btn.style.display = '';
     }
   } catch (err) {
     console.error(err);
-    showError('Failed to connect to the server. Please check your connection and try again.');
+    showError('Não foi possível ligar ao servidor. Verifica a tua ligação e tenta novamente.');
     btn.style.display = '';
   } finally {
     loading.classList.remove('show');
@@ -878,11 +878,11 @@ async function submitBooking() {
 // ═══════════════════════════════════════════════════════════
 function getSessionName(id) {
   const names = {
-    'anamnese':         'Initial Conversation',
-    'leitura-chakras':  'Chakra Map Reading',
-    'roda-chakras':     'Chakra Wheel',
-    'identidade-marte': 'Mars Identity',
-    'mapa-astrologico': 'Complete Astrological Map'
+    'anamnese':         'Conversa Inicial',
+    'leitura-chakras':  'Leitura de Mapa de Chakras',
+    'roda-chakras': 'Roda de Chakras',
+    'identidade-marte': 'Identidade de Marte',
+    'mapa-astrologico': 'Mapa Astrológico Completo'
   };
   return names[id] || id;
 }
