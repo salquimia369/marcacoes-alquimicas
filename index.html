@@ -25,7 +25,7 @@
       --blocked:    #3a2a20;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; font-weight: 500;}
 
     html { scroll-behavior: smooth; }
 
@@ -107,6 +107,7 @@
       color: var(--text-dim);
       max-width: 480px;
       margin: 0 auto;
+      padding: 3px;
     }
 
     /* ── section titles ── */
@@ -362,7 +363,7 @@
       font-family: 'Cinzel', serif;
       font-size: 1rem;
       letter-spacing: 0.1em;
-      padding: 8px 14px;
+      padding: 4px 8px;
       cursor: pointer;
       transition: all 0.15s;
       font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
@@ -517,13 +518,14 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 16px;
+  background: linear-gradient(135deg, #1d4457 29%, #8b6f1a 203%);
 }
 .calendar-nav button {
   background: none;
-  border: 1px solid var(--border);
-  color: var(--gold-dim);
+  border: 1px solid rgb(255 255 255 / 44%);
+  color: #FFFFFF;
   font-family: 'Cinzel', serif;
-  font-size: 1rem;
+  font-size: 2rem;
   padding: 6px 14px;
   cursor: pointer;
   border-radius: 2px;
@@ -532,32 +534,33 @@
 .calendar-nav button:hover { border-color: var(--gold); color: var(--gold-light); }
 .calendar-nav span {
   font-family: 'Cinzel', serif;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   letter-spacing: 0.12em;
   color: var(--gold-light);
   text-transform: uppercase;
 }
 .cal-grid {
   display: grid;
+  overflow-wrap: anywhere;
   grid-template-columns: repeat(7, 1fr);
   gap: 4px;
   margin-bottom: 20px;
 }
-.cal-header { font-family: 'Cinzel', serif; font-size: 0.65rem; text-align: center; color: var(--text-faint); padding: 4px 0; letter-spacing: 0.1em; }
+.cal-header { font-family: 'Cinzel', serif; font-size: 0.9rem; text-align: center; color: var(--text-faint); padding: 4px 0; letter-spacing: 0.1em; }
 .cal-day {
   aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Cinzel', serif;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   border-radius: 2px;
   border: 1px solid transparent;
   cursor: default;
-  color: var(--text-faint);
+  color: #c7c7c7;
 }
 .cal-day.available {
-  background: var(--surface2);
+  background: #3f5244;
   border-color: var(--border);
   color: var(--text);
   cursor: pointer;
@@ -598,7 +601,7 @@
       <div class="session-icon">◈</div>
   <div class="session-info">
     <h3>Conversa Inicial</h3>
-    <p>O primeiro passo. Compartilhe seus objetivos ou bloqueios e descubra como a Alquimia pode servir ao seu processo. Gratuito, sem compromisso.</p>
+    <p>O primeiro passo. Compartilhe seus objetivos ou bloqueios e descubra como a Alquimia pode servir ao seu processo. <br>Gratuito, sem compromisso.</p>
   </div>
   <span class="session-badge badge-free">Começe aqui</span>
     </div> 
@@ -621,6 +624,7 @@
       <span class="session-badge badge">As Tendências</span>
     </div>
 
+    <!--
     <div class="session-card blocked" data-session="identidade-marte" onclick="selectSession(this)" title="">
       <div class="session-icon">♂</div>
       <div class="session-info">
@@ -630,14 +634,14 @@
       <span class="session-badge badge">A Missão de 2026</span>
     </div>
 
-    <div class="session-card blocked" data-session="mapa-astrologico" onclick="selectSession(this)" title="">
+     <div class="session-card blocked" data-session="mapa-astrologico" onclick="selectSession(this)" title="">
       <div class="session-icon">☉☾</div>
       <div class="session-info">
         <h3>Mapa Astrológico</h3>
         <p>Uma série de 3 sessões avançadas onde entendemos as cobranças e estímulos dos principais planetas no seu mapa astral e a sua influência sobre os chakras. Para quem busca conexão e entendimento com o seu Corpo Astrológico.</p>
       </div>
       <span class="session-badge badge">As 12 Virtudes</span>
-    </div>
+    </div>-->
 
   </div>
 
@@ -668,7 +672,7 @@
 
   <!-- ── STEP 3: Choose slot ── -->
   <div class="section-title">III · Data e Hora</div>
-  <p class="timezonenote">Horários correspondentes à sua localidade</p>
+  <p class="timezonenote">Horários correspondentes à sua localização</p>
   <div class="slots-section">
     <div id="noSessionMsg" class="no-session-msg" style="display:none">
       Selecione uma sessão disponível para visualizar os horários.
@@ -707,7 +711,7 @@
       Confirmar Marcação
     </button>
     <p class="submit-note">
-      · Um email de confirmação será enviado · <br>Em breve receberá o link do Google Meet</p>
+      Um email de confirmação será enviado<br>Em breve receberá o link do Google Meet</p>
   </div>
 
   <div class="ornament">🜍 🜔 ☿</div>
