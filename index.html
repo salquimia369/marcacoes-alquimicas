@@ -80,10 +80,10 @@
       overflow:hidden;
       }
     .headersessao {
-      background: linear-gradient(135deg, #1d4457 29%, #8b6f1a 203%);
+      background: linear-gradient(135deg, #466488 0%, #c77103 203%);
       padding-top: 30px;
       padding-bottom: 40px;
-      box-shadow: inset -16px -16px 11px 0px rgba(0, 0, 0, 0.15);
+      /*box-shadow: inset -16px -16px 11px 0px rgba(0, 0, 0, 0.15);*/
     }
       .headerborder {
         width: 100%;
@@ -94,17 +94,18 @@
       font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
       font-size: clamp(1.5rem, 4vw, 2.1rem);
       font-weight: 400;
-      color: var(--gold-light);
+      color: #FFFFFF;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       margin-bottom: 0px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
 
     header p {
       font-family: "Tw Cen MT Condensed", "Tw Cen MT", "Arial Narrow", sans-serif;
       font-size: 1.35rem;
       font-style: italic;
-      color: var(--text-dim);
+      color: #bf9e56;
       max-width: 480px;
       margin: 0 auto;
       padding: 3px;
@@ -151,14 +152,18 @@
     div[data-session="anamnese"] {
       background: linear-gradient(135deg, #1c1a10 0%, #211d13 100%);
     }
-    div[data-session="leitura-chakras"] {
-      background: #314a6e;
+    div[data-session="mapa-chakras"] {
+      background: linear-gradient(135deg, #314a6e 0%, #211d13 100%);
+;
     }
      div[data-session="roda-chakras"] {
-      background: #58799e;
+      background: linear-gradient(135deg, #1d4457 29%, #8b6f1a 203%);
+    }
+    div[data-session="mandala-relogio"] {
+      background: linear-gradient(135deg, #0d1b41 0%, #ffce82 203%);
     }
      div[data-session="identidade-marte"] {
-      background: #d1a265;
+      background: linear-gradient(135deg, #563838 29%, #20ccff 203%);
     }
      div[data-session="mapa-astrologico"] {
       background: #5f371d;
@@ -183,9 +188,8 @@
       background: var(--blocked);
     }
     .session-card.selected {
-      border-color: var(--gold);
-      background: #2f8f33;
-      box-shadow: 0 0 0 3px var(--gold-dim) inset;
+     outline: 3px solid #ffffff;
+     outline-offset: -6px;
     }
 
     .session-icon {
@@ -361,11 +365,13 @@
       border-radius: 2px;
       color: #000000;
       font-family: 'Cinzel', serif;
-      font-size: 1rem;
+      font-size: 1.2rem;
       letter-spacing: 0.1em;
       padding: 4px 8px;
       cursor: pointer;
       transition: all 0.15s;
+      height: 44px;
+      width: 93px;
       font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
     }
     .slot-btn:hover:not(:disabled) {
@@ -508,7 +514,7 @@
     }
     footer a:hover { color: var(--gold-light); }
     footer p {
-      font-size: 0.8rem;
+      font-size: 1.1rem;
       color: var(--text-faint);
       font-style: italic;
       margin-top: 8px;
@@ -534,7 +540,7 @@
 .calendar-nav button:hover { border-color: var(--gold); color: var(--gold-light); }
 .calendar-nav span {
   font-family: 'Cinzel', serif;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   letter-spacing: 0.12em;
   color: var(--gold-light);
   text-transform: uppercase;
@@ -546,21 +552,21 @@
   gap: 4px;
   margin-bottom: 20px;
 }
-.cal-header { font-family: 'Cinzel', serif; font-size: 0.9rem; text-align: center; color: var(--text-faint); padding: 4px 0; letter-spacing: 0.1em; }
+.cal-header { font-family: 'Cinzel', serif; font-size: 1.2rem; text-align: center; color: var(--text-faint); padding: 4px 0; letter-spacing: 0.1em; }
 .cal-day {
   aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Cinzel', serif;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   border-radius: 2px;
   border: 1px solid transparent;
   cursor: default;
   color: #c7c7c7;
 }
 .cal-day.available {
-  background: #3f5244;
+  background: #ffffff;
   border-color: var(--border);
   color: var(--text);
   cursor: pointer;
@@ -568,7 +574,7 @@
 .cal-day.available:hover { border-color: var(--gold-dim); color: var(--gold-light); }
 .cal-day.selected { background: rgba(201,168,76,0.15); border-color: var(--gold); color: var(--gold-light); }
 .cal-day.taken-all { opacity: 0.35; text-decoration: line-through; }
-.time-picker { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+.time-picker { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center;
 }
 
     /* ── responsive ── */
@@ -588,65 +594,18 @@
     <div class="sigil"><img src="img/Logo_Cor_A.png" alt="Logo"></div>
     <div class="headersessao">
       <div class="headerborder"></div>
-      <h1>Marque a sua sessão</h1>
-      <p>Escolha o seu momento - a transformação começa aqui</p>
+      <h1>Marca a tua sessão</h1>
+      <p>Escolhe o teu momento - a transformação começa aqui</p>
     </div>
   </header>
 
   <!-- ── STEP 1: Choose session ── -->
   <div class="section-title">I · Sessão</div>
 
-  <div class="sessions-grid" id="sessionsGrid">
-     <div class="session-card" data-session="anamnese" onclick="selectSession(this)">
-      <div class="session-icon">◈</div>
-  <div class="session-info">
-    <h3>Conversa Inicial</h3>
-    <p>O primeiro passo. Compartilhe seus objetivos ou bloqueios e descubra como a Alquimia pode servir ao seu processo. <br>Gratuito, sem compromisso.</p>
-  </div>
-  <span class="session-badge badge-free">Começe aqui</span>
-    </div> 
-
-    <div class="session-card" data-session="leitura-chakras" onclick="selectSession(this)">
-      <div class="session-icon">🜔</div>
-      <div class="session-info">
-        <h3>Leitura do Mapa de Chakras</h3>
-        <p>Uma sessão para análise energética e leitura do seu mapa de chakras. Inclui diagnóstico e orientação prática.</p>
-      </div>
-      <span class="session-badge badge">O Presente</span>
-    </div>
-
-    <div class="session-card blocked" data-session="roda-chakras" onclick="selectSession(this)" title="">
-      <div class="session-icon">⊕</div>
-      <div class="session-info">
-        <h3>Roda de Chakras</h3>
-        <p>Olhar para o passado para informar o futuro. Uma visão da jornada até agora - o seu caminho e a sua bagagem.</p>
-      </div>
-      <span class="session-badge badge">As Tendências</span>
-    </div>
-
-    <!--
-    <div class="session-card blocked" data-session="identidade-marte" onclick="selectSession(this)" title="">
-      <div class="session-icon">♂</div>
-      <div class="session-info">
-        <h3>A Identidade de Marte</h3>
-        <p>Uma leitura focada em Marte no seu mapa astral. Onde e como seu o guerreiro se manifesta na sua vida, os desafios que enfrenta e como se transforma.</p>
-      </div>
-      <span class="session-badge badge">A Missão de 2026</span>
-    </div>
-
-     <div class="session-card blocked" data-session="mapa-astrologico" onclick="selectSession(this)" title="">
-      <div class="session-icon">☉☾</div>
-      <div class="session-info">
-        <h3>Mapa Astrológico</h3>
-        <p>Uma série de 3 sessões avançadas onde entendemos as cobranças e estímulos dos principais planetas no seu mapa astral e a sua influência sobre os chakras. Para quem busca conexão e entendimento com o seu Corpo Astrológico.</p>
-      </div>
-      <span class="session-badge badge">As 12 Virtudes</span>
-    </div>-->
-
-  </div>
+  <div class="sessions-grid" id="sessionsGrid"></div>
 
   <!-- ── STEP 2: Personal data ── -->
-  <div class="section-title">II · As suas informações</div>
+  <div class="section-title">II · As tuas informações</div>
 
   <div class="form-section">
     <div class="form-grid">
@@ -670,9 +629,10 @@
     </div>
   </div>
 
-  <!-- ── STEP 3: Choose slot ── -->
   <div class="section-title">III · Data e Hora</div>
-  <p class="timezonenote">Horários correspondentes à sua localização</p>
+  <p class="timezonenote" id="timezoneNote">
+  Os horários serão apresentados no teu fuso horário local.
+</p>
   <div class="slots-section">
     <div id="noSessionMsg" class="no-session-msg" style="display:none">
       Selecione uma sessão disponível para visualizar os horários.
@@ -688,31 +648,31 @@
   <button onclick="changeMonth(1)">›</button>
 </div>
 <div class="cal-grid" id="calGrid" style="display:none"></div>
-<div class="time-picker" id="timePicker"></div>
+<div class="time-picker" id="timePicker"></div><br>
+<div class="manualtimezone" id="manualtimezone"></div>
 <div id="noSlotsMsg" class="no-session-msg" style="display:none">
-  Sem horários disponíveis. Contacte via <a href="https://wa.me/238982173" target="_blank">WhatsApp</a>.
+  Sem horários disponíveis. Por favor, contacta-me por <a href="https://wa.me/238982173" target="_blank" style="color:var(--gold-dim); font-weight: bold;">WhatsApp</a>.
 </div>
 </div>
 
-  <!-- ── messages ── -->
   <div class="msg msg-error" id="msgError"></div>
   <div class="msg msg-success" id="msgSuccess">
     <span class="success-icon">✦</span>
-    <strong>Marcação Recebida</strong>
+    <strong>Pedido de marcação Recebida</strong>
     <span id="successText"></span>
   </div>
 
-  <!-- ── submit ── -->
   <div class="submit-area">
     <div class="loading" id="loadingSubmit">
-      <div class="spinner"></div> Anotando a sua marcação 𓂃🪶..
+      <div class="spinner"></div> Anotando a sua marcação 𓂃🪶<br> Por favor, aguarde...
     </div>
     <button class="btn-submit" id="btnSubmit" onclick="submitBooking()">
-      Confirmar Marcação
+      Confirmar
     </button>
-    <p class="submit-note">
-      Um email de confirmação será enviado<br>Em breve receberá o link do Google Meet</p>
-  </div>
+   <!-- <p class="submit-note">
+     <br>Em breve, entrarei em contacto para confirmar a marcação.
+      <br>Se não receberes resposta em 24h, por favor contacta-me via <a href="https://wa.me/238982173" target="_blank" style="color:var(--gold-dim); font-weight: bold;">WhatsApp</a>.</p>
+  </div> -->
 
   <div class="ornament">🜍 🜔 ☿</div>
 
@@ -720,12 +680,25 @@
     <a href="https://salquimia369.github.io/Alquimia-do-Tempo/index.html" target="_blank">⌛ Alquimia do Tempo</a>
     &nbsp;·&nbsp;
     <a href="https://salquimia369.github.io/oraculoalquimico/" target="_blank">☽ Oráculo Alquímico</a>
-   <p>© 2026 Salquimia by Miguel Bernardo · Todos os direitos reservados</p>
+   <p>© 2026 Desenvolvido por Miguel Bernardo - Salquimia · Todos os direitos reservados</p>
   </footer>
 
 </div>
 
 <script>
+  const customerTimezone =
+  Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+  
+  document.addEventListener('DOMContentLoaded', () => {
+  const note = document.getElementById('timezoneNote');
+
+  if (note) {
+    note.textContent =
+      `Os horários são apresentados no teu fuso horário (${customerTimezone}).`;
+  }
+
+  loadServices();
+});
 // ═══════════════════════════════════════════════════════════
 // CONFIG — SUBSTITUI PELO TEU GOOGLE APPS SCRIPT URL
 // ═══════════════════════════════════════════════════════════
@@ -734,19 +707,27 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyqkPc5zLFm9Q-Y
 // ═══════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════
-let selectedSession = 'leitura-chakras';
-let selectedSlot    = null;   // { date, time, id }
-let availableSlots  = [];
+let selectedSession = null;
+let selectedSlot = null;
+let availableSlots = [];
+let services = [];
 
 // ═══════════════════════════════════════════════════════════
 // SESSION SELECTION
 // ═══════════════════════════════════════════════════════════
 function selectSession(card) {
   if (card.classList.contains('blocked')) return;
-  document.querySelectorAll('.session-card.selected').forEach(c => c.classList.remove('selected'));
+
+  document.querySelectorAll('.session-card.selected')
+    .forEach(c => c.classList.remove('selected'));
+
   card.classList.add('selected');
+
   selectedSession = card.dataset.session;
   selectedSlot = null;
+
+
+
   loadSlots();
 }
 
@@ -758,6 +739,88 @@ let currentYear  = new Date().getFullYear();
 let currentMonth = new Date().getMonth() + 1;
 let allSlots     = [];
 let selectedDay  = null;
+
+async function loadServices() {
+  try {
+    const res = await fetch(
+      `${APPS_SCRIPT_URL}?action=getServices`
+    );
+
+    const data = await res.json();
+
+    services = data.services || [];
+
+    renderServices();
+
+  } catch (err) {
+    console.error('Erro ao carregar serviços:', err);
+    showError('Não foi possível carregar as sessões disponíveis.');
+  }
+}
+
+function renderServices() {
+  const grid = document.getElementById('sessionsGrid');
+
+  grid.innerHTML = '';
+
+  services.forEach(service => {
+    const card = document.createElement('div');
+
+    card.className = 'session-card' +
+      (service.active ? '' : ' blocked');
+
+    card.dataset.session = service.id;
+
+    if (service.active) {
+      card.onclick = () => selectSession(card);
+    }
+
+    const badge = service.active
+      ? `${service.duration} min`
+      : 'Brevemente';
+
+    card.innerHTML = `
+      <div class="session-icon">◈</div>
+
+      <div class="session-info">
+        <h3>${escapeHtml(service.name)}</h3>
+        <p>
+          ${escapeHtml(service.description || '')}
+        </p>
+      </div>
+
+      <span class="session-badge ${service.active ? 'badge-free' : 'badge-soon'}">
+        ${badge}
+      </span>
+    `;
+
+    grid.appendChild(card);
+  });
+
+  // Seleccionar automaticamente o primeiro serviço activo
+  const firstActive = services.find(s => s.active);
+
+  if (firstActive) {
+    const card = grid.querySelector(
+      `[data-session="${firstActive.id}"]`
+    );
+
+    if (card) {
+      card.classList.add('selected');
+      selectedSession = firstActive.id;
+      loadSlots();
+    }
+  }
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
 
 async function loadSlots() {
   const loading = document.getElementById('loadingSlots');
@@ -779,9 +842,10 @@ async function loadSlots() {
     const res  = await fetch(url);
     const data = await res.json();
     allSlots = data.slots || [];
-  } catch (err) {
-    console.warn('Fallback demo slots:', err);
-    allSlots = getDemoSlots();
+    } catch (err) {
+    console.error('Erro ao carregar horários:', err);
+    allSlots = [];
+    showError('Não foi possível carregar os horários. Tenta novamente.');
   } finally {
     loading.classList.remove('show');
   }
@@ -789,20 +853,6 @@ async function loadSlots() {
   renderCalendar();
 }
 
-function getDemoSlots() {
-  const slots = [];
-  const pad = n => String(n).padStart(2,'0');
-  const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
-  for (let d = 1; d <= daysInMonth; d++) {
-    const date = new Date(currentYear, currentMonth - 1, d);
-    if (date.getDay() === 0 || date.getDay() === 6) continue;
-    const dateStr = `${currentYear}-${pad(currentMonth)}-${pad(d)}`;
-    ['10:00','14:00','16:00'].forEach((t, i) => {
-      slots.push({ id: `${dateStr}-${t}`, date: dateStr, time: t, taken: i === 1 });
-    });
-  }
-  return slots;
-}
 
 function changeMonth(dir) {
   currentMonth += dir;
@@ -934,13 +984,17 @@ async function submitBooking() {
   btn.style.display     = 'none';
   loading.classList.add('show');
 
-  const payload = {
-    action:   'bookSlot',
-    session:  selectedSession,
-    slotId:   selectedSlot.id,
-    date:     selectedSlot.date,
-    time:     selectedSlot.time,
-    nome, idade, email, whatsapp
+    const payload = {
+    action: 'bookSlot',
+    service: selectedSession,
+    slotId: selectedSlot.id,
+    date: selectedSlot.date,
+    time: selectedSlot.time,
+    nome,
+    idade,
+    email,
+    whatsapp,
+    customerTimezone
   };
 
   try {
@@ -953,7 +1007,8 @@ async function submitBooking() {
 
     if (data.success) {
       showSuccess(
-        `A tua sessão de <strong>${getSessionName(selectedSession)}</strong> está confirmada para <strong>${formatDatePT(selectedSlot.date)}</strong> às <strong>${selectedSlot.time}</strong> (horário de Cabo Verde).<br><br>Confirmação em breve por email e WhatsApp com o link do Google Meet.`
+        `O teu pedido de sessão foi recebido. Detalhes da sessão: <strong>${getSessionName(selectedSession)}</strong> para <strong>${formatDatePT(selectedSlot.date)}</strong> às <strong>${selectedSlot.time}.</strong><br><br>Em breve, entrarei em contacto para confirmar a marcação.
+      <br>Se não receberes resposta em 24h, por favor contacta-me via <a href="https://wa.me/238982173" target="_blank" style="color:var(--gold-dim); font-weight: bold;">WhatsApp</a>.</p>`
       );
       // Mark slot as taken in UI
       document.querySelector(`[data-id="${selectedSlot.id}"]`)?.classList.add('taken');
@@ -977,7 +1032,7 @@ async function submitBooking() {
 function getSessionName(id) {
   const names = {
     'anamnese':         'Conversa Inicial',
-    'leitura-chakras':  'Leitura de Mapa de Chakras',
+    'mapa-chakras':  'Leitura de Mapa de Chakras',
     'roda-chakras': 'Roda de Chakras',
     'identidade-marte': 'Identidade de Marte',
     'mapa-astrologico': 'Mapa Astrológico Completo'
@@ -1021,6 +1076,7 @@ document.querySelectorAll('input').forEach(input => {
 });
 
 loadSlots();
+
 </script>
 </body>
 </html>
