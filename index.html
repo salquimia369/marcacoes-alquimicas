@@ -839,18 +839,42 @@ async function loadSlots() {
   const monthStr = `${currentYear}-${String(currentMonth).padStart(2,'0')}`;
   try {
     const url  = `${APPS_SCRIPT_URL}?action=getSlots&session=${encodeURIComponent(selectedSession)}&month=${monthStr}`;
-    const res  = await fetch(url);
-    const data = await res.json();
-    allSlots = data.slots || [];
-    } catch (err) {
-    console.error('Erro ao carregar horários:', err);
-    allSlots = [];
-    showError('Não foi possível carregar os horários. Tenta novamente.');
-  } finally {
-    loading.classList.remove('show');
-  }
+    const res = await fetch(url);
 
-  renderCalendar();
+if (!res.ok) {
+  throw new Error(
+    'Servidor respondeu com HTTP ' + res.status
+  );
+}
+
+const data = await res.json();
+
+if (!data.success) {
+  throw new Error(
+    data.message || 'Erro ao obter horários.'
+  );
+}
+
+  allSlots = data.slots || [];
+
+} catch (err) {
+
+  console.error('Erro ao carregar horários:', err);
+
+  allSlots = [];
+
+  showError(
+    'Não foi possível carregar os horários neste momento. ' +
+    'Por favor, tenta novamente dentro de alguns segundos.'
+  );
+
+} finally {
+
+  loading.classList.remove('show');
+
+}
+
+renderCalendar();
 }
 
 
