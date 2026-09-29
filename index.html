@@ -749,10 +749,7 @@ function selectSession(card) {
 // LOAD AVAILABLE SLOTS FROM GOOGLE SHEETS (via Apps Script)
 // ═══════════════════════════════════════════════════════════
 // ── Calendar state ──
-let currentYear  = new Date().getFullYear();
-let currentMonth = new Date().getMonth() + 1;
-let allSlots     = [];
-let selectedDay  = null;
+
 
 async function loadServices() {
   try {
@@ -771,6 +768,32 @@ async function loadServices() {
     showError('Não foi possível carregar as sessões disponíveis.');
   }
 }
+
+const now = new Date();
+
+const earliestBookingDate = new Date(
+  now.getTime() + 48 * 60 * 60 * 1000
+);
+
+const businessDateParts = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'Atlantic/Cape_Verde',
+  year: 'numeric',
+  month: '2-digit'
+}).formatToParts(earliestBookingDate);
+
+const businessYear = businessDateParts.find(
+  p => p.type === 'year'
+).value;
+
+const businessMonth = businessDateParts.find(
+  p => p.type === 'month'
+).value;
+
+let currentYear = Number(businessYear);
+let currentMonth = Number(businessMonth);
+
+let allSlots = [];
+let selectedDay = null;
 
 function renderServices() {
   const grid = document.getElementById('sessionsGrid');
